@@ -29,8 +29,8 @@ public class Appointment {
     @JoinColumn(name = "doctor_id", nullable = false)
     private Doctor doctor;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "patient_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)//basically ManyToOne when think like Many class(Appointment) to one(Doctor)
+    @JoinColumn(name = "patient_id", nullable = false)//and these are only foreign key relationship not like properties of entites
     private Patient patient;
 
     @OneToOne

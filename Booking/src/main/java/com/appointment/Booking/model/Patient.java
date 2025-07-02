@@ -18,8 +18,12 @@ public class Patient {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String name;
+
+    @Column(unique = true, nullable = false)
     private String phone;
+
     private String email;
 
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
