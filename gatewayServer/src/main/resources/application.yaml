@@ -1,0 +1,25 @@
+resilience4j:
+  circuitbreaker:
+    instances:
+      bookingCircuitBreaker:
+        registerHealthIndicator: true
+        failureRateThreshold: 50
+        minimumNumberOfCalls: 5
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        waitDurationInOpenState: 5s
+        permittedNumberOfCallsInHalfOpenState: 3
+        slidingWindowSize: 10
+        slidingWindowType: COUNT_BASED
+  timelimiter:
+    instances:
+      bookingCircuitBreaker:
+        timeoutDuration: 2m
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always

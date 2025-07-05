@@ -1,6 +1,7 @@
 package com.appointment.Booking.service.impl;
 
 import com.appointment.Booking.dto.BulkSlotCreateRequest;
+import com.appointment.Booking.dto.SlotDto;
 import com.appointment.Booking.dto.TimeRange;
 import com.appointment.Booking.model.Doctor;
 import com.appointment.Booking.model.Slot;
@@ -11,6 +12,7 @@ import com.appointment.Booking.service.SlotService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,4 +49,30 @@ public class SlotServiceImpl implements SlotService {
         slotRepo.saveAll(slotsToSave);
         return slotsToSave.size();
     }
+
+    @Override
+    public List<SlotDto> getAllSlots(Long doctorId, LocalDate date) {
+        return slotRepo.findByDoctorIdAndDate(doctorId, date)
+                .stream()
+                .map(this::toDto)
+                .toList();
+    }
+
+    @Override
+    public List<SlotDto> getAvailableSlotsInTimeRange(Long doctorId, LocalDate date, LocalTime from, LocalTime to) {
+        return slotRepo.findByDoctorIdAndDateAndTimeBetweenAndStatus(doctorId, date, from, to, SlotStatus.AVAILABLE)
+                .stream()
+                .map(this::toDto)
+                .toList();
+    }
+
+    private SlotDto toDto(Slot slot) {
+        SlotDto dto = new SlotDto();
+        dto.setSlotId(slot.getId());
+        dto.setTime(slot.getTime());
+        dto.setDurationMinutes(slot.getDurationMinutes());
+        dto.setStatus(slot.getStatus());
+        return dto;
+    }
+
 }
