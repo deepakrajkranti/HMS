@@ -24,7 +24,8 @@ public class GatewayServerApplication {
 						.filters(f -> f.rewritePath("/hms/booking/(?<segment>.*)", "/${segment}")
 								.circuitBreaker(config -> config.setName("bookingCircuitBreaker")
 										.setFallbackUri("forward:/contactSupport").setStatusCodes(Set.of("500", "502", "503", "504"))))
-						.uri("http://localhost:8080")).build();
+						.uri("http://bookingservice:8080")).build();
+		//for local testing, use "http://localhost:8080" instead of "http://bookingservice:8080"
 	}
 
 }

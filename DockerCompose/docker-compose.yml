@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: raj
+      MYSQL_DATABASE: doctor_booking_db
+      MYSQL_USER: deepak
+      MYSQL_PASSWORD: raj
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      timeout: 10s
+      retries: 10
+      interval: 10s
+      start_period: 10s
+    ports:
+      - "3306:3306"
+    networks:
+      - hms-network
+
+  bookingservice:
+    build:
+      context: ../Booking
+    container_name: booking_service
+    ports:
+      - "8080:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/doctor_booking_db
+      SPRING_DATASOURCE_USERNAME: deepak
+      SPRING_DATASOURCE_PASSWORD: raj
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    networks:
+      - hms-network
+
+  gatewayserver:
+    build:
+      context: ../gatewayServer
+    container_name: gateway_server
+    ports:
+      - "8081:8081"
+    depends_on:
+      - bookingservice
+    networks:
+      - hms-network
+
+networks:
+  hms-network:
+    driver: bridge

@@ -20,6 +20,7 @@ public class AppointmentController {
     public ResponseEntity<?> bookSlot(@RequestParam Long slotId,
                                       @RequestBody PatientBookingRequest request) {
         try {
+            System.out.println("Booking slot with ID: " + slotId);
             String msg = bookingService.bookSlot(slotId, request.getPatient(), request.getSymptoms());
             return ResponseEntity.ok().body(Map.of("status", "SUCCESS", "message", msg));
         } catch (IllegalStateException e) {
