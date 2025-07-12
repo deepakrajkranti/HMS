@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -30,8 +32,10 @@ public class Slot {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "doctor_id", nullable = false)
+    @ToString.Exclude
     private Doctor doctor;
 
+    @ToString.Exclude
     @OneToOne(mappedBy = "slot", cascade = CascadeType.ALL)
     private Appointment appointment;
 }
